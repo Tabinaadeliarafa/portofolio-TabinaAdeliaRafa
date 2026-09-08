@@ -16,7 +16,7 @@ export const PERSONAL_INFO = {
   github: 'https://github.com/Tabinaadeliarafa',
   status: 'Open to Opportunities',
   badgeTagline: 'Data • Design • Development',
-  portraitImage: '/src/assets/images/tabina_portrait_1788869842744.jpg',
+  portraitImage: '/src/assets/images/potret.jpg',
   aboutQuote: 'Curious by nature.\nTechnical by mindset.\nCreative by heart.',
   aboutDescription:
     'An active and detail-oriented Informatics Engineering student with a strong interest in UI/UX Design, Backend Development, and Data Analysis. Experienced in application, website, and game development through academic projects, internships, and organizational activities. Comfortable working independently or collaboratively, with strong responsibility, time management, communication, and attention to detail.',
