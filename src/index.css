@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-display: 'Syne', sans-serif;
@@ -22,7 +24,35 @@ html {
   font-family: var(--font-sans);
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 ::selection {
   background-color: #647E68;
   color: #FFFFFF;
 }
+
+/* Apple Liquid Glass / Glass Bubble UI styling */
+.glass-bubble-card {
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 20px 40px -15px rgba(24, 39, 71, 0.07),
+    0 0 0 1px rgba(216, 216, 216, 0.6),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95);
+}
+
+.dark .glass-bubble-card {
+  background: rgba(15, 26, 48, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(216, 216, 216, 0.16);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.14);
+}
+

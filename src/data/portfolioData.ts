@@ -187,6 +187,50 @@ export const STATS: StatItem[] = [
 
 export const PROJECTS: Project[] = [
   {
+    id: 'gis-bekasi-disaster',
+    title: 'Pengembangan Sistem Informasi Geografis Berbasis Web untuk Visualisasi Persebaran Kejadian Bencana di Kabupaten Bekasi',
+    category: 'Geographic Information System / Data Visualization',
+    tagline: 'Interactive WebGIS & predictive time series forecasting with LSTM',
+    description:
+      'A web-based Geographic Information System developed to visualize the distribution of disaster events in Kabupaten Bekasi. The system provides interactive geographic visualization, historical disaster data, statistical analysis, trend visualization, and disaster prediction features.',
+    highlights: [
+      'Interactive digital map visualization using Leaflet & GeoJSON spatial boundaries',
+      'Disaster distribution tracking (Banjir, Kekeringan, Cuaca Ekstrem) across Bekasi Regency',
+      'Historical disaster data analysis from BPBD Kabupaten Bekasi (2020–2025)',
+      'Time Series Forecasting using Long Short-Term Memory (LSTM) for disaster trend prediction',
+      'Administrative management panel developed with Filament & PostgreSQL database',
+      'Automated PDF and CSV report generator with geospatial map snapshots',
+      'Evaluated with Extreme Programming (XP), 99.35% Black Box Testing, and 84.43 SUS score (Grade A - Excellent)',
+    ],
+    technologies: [
+      'Laravel',
+      'React',
+      'TypeScript',
+      'Leaflet',
+      'QGIS',
+      'PostgreSQL',
+      'GeoJSON',
+      'REST API',
+      'Data Visualization',
+      'Time Series Forecasting / LSTM',
+    ],
+    image: '/src/assets/images/project/skripsi.jpg',
+    githubUrl: 'https://github.com/Tabinaadeliarafa/skripsi.git',
+    featured: true,
+    role: 'Undergraduate Thesis Researcher & Developer',
+    architectureDetails: {
+      overview:
+        'Architected using Extreme Programming (XP) methodology with a Laravel backend, Leaflet.js interactive maps, PostgreSQL database, and LSTM neural networks for predicting future disaster occurrences based on 2020–2025 BPBD datasets.',
+      keyDeliverables: [
+        'Interactive choropleth map with district-level risk zoning and GeoJSON layer filtering',
+        'Time Series Forecasting engine predicting future disaster occurrences with LSTM',
+        'Administrative CRUD dashboard built with Filament for disaster reports and spatial master data',
+        'Validated with 84.43 System Usability Scale (SUS) Grade A rating and 99.35% Black Box Testing',
+      ],
+      schemaOrStack: 'Laravel 12 / PostgreSQL / Leaflet.js / GeoJSON / QGIS / LSTM / Filament',
+    },
+  },
+  {
     id: 'ecotrack',
     title: 'EcoTrack',
     category: 'Mobile Application / Backend Development',
@@ -267,7 +311,7 @@ export const PROJECTS: Project[] = [
       'Security hardening, query optimization & data integrity guarantees',
     ],
     technologies: ['Laravel', 'PHP', 'PostgreSQL', 'REST API', 'Blade / Tailwind'],
-    image: '/src/assets/images/project_teraz_1788869894653.jpg',
+    image: '/src/assets/images/project/teraz.jpg',
     githubUrl: 'https://github.com/Tabinaadeliarafa',
     featured: true,
     role: 'Backend Developer',

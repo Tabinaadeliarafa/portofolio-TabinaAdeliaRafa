@@ -15,7 +15,7 @@ export default function App() {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F6F6F6] dark:bg-navy-dark text-[#182747] dark:text-white/90 font-sans antialiased overflow-x-hidden selection:bg-[#647E68] selection:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-[#F6F6F6] dark:bg-[#182747] text-[#182747] dark:text-[#D8D8D8] font-sans antialiased overflow-x-hidden selection:bg-[#647E68] selection:text-white transition-colors duration-300">
       {/* Navigation Bar */}
       <Navbar onOpenResume={() => setIsResumeOpen(true)} />
 

@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, CheckCircle2, ChevronDown, ChevronUp, Sparkles, Building2, Briefcase, Award, ArrowUpRight } from 'lucide-react';
+import { 
+  Calendar, 
+  CheckCircle2, 
+  Sparkles, 
+  Building2, 
+  ChevronLeft, 
+  ChevronRight, 
+  Briefcase,
+  Layers,
+  ArrowRight
+} from 'lucide-react';
 import { EXPERIENCES } from '../data/portfolioData';
 
 export default function Experience() {
-  const [expandedId, setExpandedId] = useState<string | null>('exp-1');
   const [filter, setFilter] = useState<'All' | 'Internships' | 'Courses'>('All');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   const filteredExperiences = EXPERIENCES.filter((exp) => {
     if (filter === 'All') return true;
@@ -14,185 +25,299 @@ export default function Experience() {
     return true;
   });
 
-  const toggleExpand = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
+  // Reset index when filter changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [filter]);
+
+  const total = filteredExperiences.length;
+
+  const nextSlide = () => {
+    if (total <= 1) return;
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % total);
+  };
+
+  const prevSlide = () => {
+    if (total <= 1) return;
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  };
+
+  const goToSlide = (index: number) => {
+    setDirection(index > currentIndex ? 1 : -1);
+    setCurrentIndex(index);
+  };
+
+  const currentExp = filteredExperiences[currentIndex] || EXPERIENCES[0];
+
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 80 : -80,
+      opacity: 0,
+      scale: 0.94,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        x: { type: 'spring', stiffness: 320, damping: 32 },
+        opacity: { duration: 0.3 },
+        scale: { duration: 0.3 },
+      },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -80 : 80,
+      opacity: 0,
+      scale: 0.94,
+      transition: {
+        x: { type: 'spring', stiffness: 320, damping: 32 },
+        opacity: { duration: 0.25 },
+        scale: { duration: 0.25 },
+      },
+    }),
   };
 
   return (
     <section id="experience" className="py-12 sm:py-20 px-3 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       {/* Primary Section Container */}
-      <div className="bg-white rounded-[36px] sm:rounded-[44px] border border-[#D8D8D8] p-6 sm:p-10 lg:p-14 shadow-[0_8px_30px_rgb(24,39,71,0.03)] relative overflow-hidden">
+      <div className="bg-white/90 dark:bg-[#0f1a30]/80 rounded-[36px] sm:rounded-[44px] border border-[#D8D8D8] dark:border-[#D8D8D8]/15 p-6 sm:p-10 lg:p-14 shadow-[0_12px_40px_rgb(24,39,71,0.04)] relative overflow-hidden backdrop-blur-xl transition-colors duration-300">
+        {/* Subtle Ambient Light Reflections */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#647E68]/15 dark:bg-[#647E68]/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-[#562B08]/10 dark:bg-[#562B08]/15 blur-3xl pointer-events-none" />
+
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 pb-8 border-b border-[#D8D8D8]/80">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 sm:mb-12 pb-6 sm:pb-8 border-b border-[#D8D8D8]/80 dark:border-[#D8D8D8]/20 relative z-10">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <span className="h-px w-8 bg-[#562B08]" />
-              <span className="text-xs font-bold uppercase tracking-widest text-[#562B08]">
+              <span className="h-px w-8 bg-[#562B08] dark:bg-amber-400" />
+              <span className="text-xs font-bold uppercase tracking-widest text-[#562B08] dark:text-amber-400">
                 Career Journey
               </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#182747] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#182747] dark:text-white tracking-tight">
               Experience
             </h2>
-            <p className="text-sm sm:text-base text-[#182747]/75 mt-2 max-w-xl">
+            <p className="text-sm sm:text-base text-[#182747]/75 dark:text-[#D8D8D8]/80 mt-2 max-w-xl">
               Hands-on industry internships and project-based programs across data analysis, backend engineering, and user experience design.
             </p>
           </div>
 
-          {/* Filter Tabs */}
-          <div className="inline-flex p-1 rounded-full bg-[#F6F6F6] border border-[#D8D8D8] shadow-2xs self-start sm:self-auto">
-            {(['All', 'Internships', 'Courses'] as const).map((tab) => (
+          {/* Filter Tabs & Counter */}
+          <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+            <div className="inline-flex p-1 rounded-full bg-[#F6F6F6] dark:bg-white/10 border border-[#D8D8D8] dark:border-[#D8D8D8]/20 shadow-2xs">
+              {(['All', 'Internships', 'Courses'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  id={`exp-filter-${tab.toLowerCase()}`}
+                  onClick={() => setFilter(tab)}
+                  className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    filter === tab
+                      ? 'bg-[#182747] dark:bg-[#647E68] text-white shadow-xs'
+                      : 'text-[#182747]/70 dark:text-[#D8D8D8]/70 hover:text-[#182747] dark:hover:text-white'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+
+            {/* Slider Navigation Buttons */}
+            <div className="hidden sm:flex items-center gap-2">
               <button
-                key={tab}
-                id={`exp-filter-${tab.toLowerCase()}`}
-                onClick={() => setFilter(tab)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                  filter === tab
-                    ? 'bg-[#182747] text-white shadow-xs'
-                    : 'text-[#182747]/70 hover:text-[#182747]'
-                }`}
+                id="exp-slider-prev-btn"
+                onClick={prevSlide}
+                disabled={total <= 1}
+                aria-label="Previous experience"
+                className="w-10 h-10 rounded-full bg-white/80 dark:bg-white/10 border border-[#D8D8D8] dark:border-[#D8D8D8]/20 flex items-center justify-center text-[#182747] dark:text-[#D8D8D8] hover:bg-white dark:hover:bg-white/20 hover:border-[#647E68] transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-xs cursor-pointer"
               >
-                {tab}
+                <ChevronLeft className="w-4 h-4" />
               </button>
-            ))}
+              <button
+                id="exp-slider-next-btn"
+                onClick={nextSlide}
+                disabled={total <= 1}
+                aria-label="Next experience"
+                className="w-10 h-10 rounded-full bg-white/80 dark:bg-white/10 border border-[#D8D8D8] dark:border-[#D8D8D8]/20 flex items-center justify-center text-[#182747] dark:text-[#D8D8D8] hover:bg-white dark:hover:bg-white/20 hover:border-[#647E68] transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-xs cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Story Cards List with Visual Numbering & Hierarchical Emphasis */}
-        <div className="space-y-6">
-          {filteredExperiences.map((exp, idx) => {
-            const isExpanded = expandedId === exp.id;
-            const isFeatured = exp.id === 'exp-1';
-            const storyNumber = `0${idx + 1}`;
+        {/* Liquid Glass Bubble Slider Container */}
+        <div className="relative min-h-[460px] flex flex-col justify-between">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={currentExp.id}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -40) {
+                  nextSlide();
+                } else if (info.offset.x > 40) {
+                  prevSlide();
+                }
+              }}
+              className="relative w-full rounded-[32px] sm:rounded-[40px] p-6 sm:p-10 lg:p-12 overflow-hidden cursor-grab active:cursor-grabbing
+                bg-white/70 dark:bg-[#0f1a30]/75 backdrop-blur-2xl
+                border border-white/80 dark:border-white/10
+                shadow-[0_20px_50px_rgba(24,39,71,0.07),inset_0_1.5px_2px_rgba(255,255,255,0.85)]
+                dark:shadow-[0_25px_60px_rgba(0,0,0,0.5),inset_0_1.5px_2px_rgba(255,255,255,0.12)]
+                ring-1 ring-black/5 dark:ring-white/5"
+            >
+              {/* Glass Specular Top Highlight Streak */}
+              <div className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-white/80 dark:via-white/30 to-transparent pointer-events-none" />
 
-            return (
-              <motion.div
-                key={exp.id}
-                id={`experience-card-${exp.id}`}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className={`rounded-[32px] border transition-all duration-300 overflow-hidden ${
-                  isFeatured
-                    ? 'bg-gradient-to-b from-[#F6F6F6] to-white border-[#647E68]/40 shadow-md ring-1 ring-[#647E68]/20'
-                    : 'bg-[#F6F6F6]/60 hover:bg-white border-[#D8D8D8] shadow-2xs hover:shadow-md'
-                }`}
-              >
-                <div className="p-6 sm:p-8">
-                  {/* Card Header */}
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#D8D8D8]/70">
-                    <div className="flex items-start gap-4">
-                      {/* Story Number Badge */}
-                      <span className="text-2xl sm:text-3xl font-black font-serif text-[#182747]/25 shrink-0 pt-0.5">
-                        {storyNumber}
-                      </span>
-
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                          <span
-                            className={`px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                              exp.type === 'Internship'
-                                ? 'bg-[#647E68]/15 text-[#647E68] border border-[#647E68]/30'
-                                : exp.type === 'Project-Based'
-                                ? 'bg-[#562B08]/15 text-[#562B08] border border-[#562B08]/30'
-                                : 'bg-[#182747]/10 text-[#182747] border border-[#182747]/20'
-                            }`}
-                          >
-                            {exp.type}
-                          </span>
-
-                          {isFeatured && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#647E68] text-white shadow-2xs">
-                              <Sparkles className="w-2.5 h-2.5" />
-                              <span>Primary Internship</span>
-                            </span>
-                          )}
-                        </div>
-
-                        <h3 className="text-xl sm:text-2xl font-extrabold text-[#182747] tracking-tight">
-                          {exp.role}
-                        </h3>
-
-                        <div className="flex items-center gap-2 mt-1 text-sm font-semibold text-[#562B08]">
-                          <Building2 className="w-4 h-4 text-[#562B08]/80" />
-                          <span>{exp.company}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right side: Period & Toggle */}
-                    <div className="flex items-center justify-between lg:flex-col lg:items-end gap-2 shrink-0">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white border border-[#D8D8D8] text-[#182747] shadow-2xs">
-                        <Calendar className="w-3.5 h-3.5 text-[#562B08]" />
-                        <span>{exp.period}</span>
-                      </div>
-
-                      <button
-                        onClick={() => toggleExpand(exp.id)}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-[#182747] hover:text-[#562B08] transition-colors cursor-pointer py-1 px-2.5 rounded-full bg-white/80 border border-[#D8D8D8]/80 hover:bg-white"
-                        aria-expanded={isExpanded}
-                      >
-                        <span>{isExpanded ? 'Hide Details' : 'View Responsibilities'}</span>
-                        {isExpanded ? (
-                          <ChevronUp className="w-3.5 h-3.5" />
-                        ) : (
-                          <ChevronDown className="w-3.5 h-3.5" />
-                        )}
-                      </button>
-                    </div>
+              {/* Card Meta Row: Story Number, Type, Period, and Featured Badge */}
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b border-[#D8D8D8]/70 dark:border-[#D8D8D8]/15">
+                <div className="flex items-center gap-3">
+                  {/* Floating Glass Number Bubble */}
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl sm:rounded-3xl bg-[#182747]/5 dark:bg-white/10 border border-[#182747]/10 dark:border-white/15 flex items-center justify-center font-serif italic font-extrabold text-xl sm:text-2xl text-[#182747] dark:text-white shadow-2xs">
+                    0{currentIndex + 1}
                   </div>
 
-                  {/* Summary Description */}
-                  <p className="text-xs sm:text-sm text-[#182747]/80 font-normal leading-relaxed mt-4">
-                    {exp.description}
-                  </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                        currentExp.type === 'Internship'
+                          ? 'bg-[#647E68]/15 text-[#647E68] dark:text-[#7b9980] border border-[#647E68]/30 dark:border-[#647E68]/40'
+                          : currentExp.type === 'Project-Based'
+                          ? 'bg-[#562B08]/15 text-[#562B08] dark:text-amber-300 border border-[#562B08]/30 dark:border-amber-400/30'
+                          : 'bg-[#182747]/10 dark:bg-white/10 text-[#182747] dark:text-[#D8D8D8] border border-[#182747]/20 dark:border-white/20'
+                      }`}
+                    >
+                      {currentExp.type}
+                    </span>
 
-                  {/* Responsibilities Dropdown */}
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="mt-4 pt-4 border-t border-[#D8D8D8]/60 space-y-2">
-                          <p className="text-[11px] font-bold uppercase tracking-wider text-[#182747]/60 mb-2">
-                            Key Deliverables & Responsibilities
-                          </p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            {exp.responsibilities.map((resp, rIdx) => (
-                              <div
-                                key={rIdx}
-                                className="flex items-start gap-2 text-xs text-[#182747]/85 bg-white/90 p-2.5 rounded-xl border border-[#D8D8D8]/70"
-                              >
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#647E68] shrink-0 mt-0.5" />
-                                <span>{resp}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Tags Pill Row */}
-                  <div className="mt-4 pt-4 border-t border-[#D8D8D8]/50 flex flex-wrap items-center gap-1.5">
-                    {exp.tags.map((tag, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white border border-[#D8D8D8] text-[#182747]"
-                      >
-                        {tag}
+                    {currentExp.id === 'exp-1' && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#647E68] text-white shadow-2xs">
+                        <Sparkles className="w-3 h-3" />
+                        <span>Primary Internship</span>
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
+
+                {/* Period Capsule */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-white/90 dark:bg-white/10 border border-[#D8D8D8] dark:border-[#D8D8D8]/20 text-[#182747] dark:text-[#D8D8D8] shadow-2xs">
+                  <Calendar className="w-3.5 h-3.5 text-[#562B08] dark:text-amber-300" />
+                  <span>{currentExp.period}</span>
+                </div>
+              </div>
+
+              {/* Title & Company */}
+              <div className="mb-6">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#182747] dark:text-white tracking-tight leading-tight">
+                  {currentExp.role}
+                </h3>
+                <div className="flex items-center gap-2 mt-2 text-base sm:text-lg font-bold text-[#562B08] dark:text-amber-300">
+                  <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#562B08] dark:text-amber-300" />
+                  <span>{currentExp.company}</span>
+                </div>
+              </div>
+
+              {/* Summary Description */}
+              <p className="text-sm sm:text-base text-[#182747]/85 dark:text-[#D8D8D8]/90 font-normal leading-relaxed mb-8 max-w-3xl">
+                {currentExp.description}
+              </p>
+
+              {/* Key Deliverables & Responsibilities Grid */}
+              <div className="mb-8">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#182747]/60 dark:text-[#D8D8D8]/60 mb-3 flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-[#647E68]" />
+                  <span>Key Deliverables & Responsibilities</span>
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {currentExp.responsibilities.map((resp, rIdx) => (
+                    <div
+                      key={rIdx}
+                      className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/80 dark:bg-white/5 border border-[#D8D8D8]/70 dark:border-white/10 text-xs sm:text-sm text-[#182747]/90 dark:text-[#D8D8D8] shadow-2xs"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-[#647E68] dark:text-[#7b9980] shrink-0 mt-0.5" />
+                      <span className="leading-snug">{resp}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Technology Tags */}
+              <div className="pt-6 border-t border-[#D8D8D8]/60 dark:border-[#D8D8D8]/15 flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#182747]/60 dark:text-[#D8D8D8]/60 mr-2">
+                  Skills & Tools:
+                </span>
+                {currentExp.tags.map((tag, tIdx) => (
+                  <span
+                    key={tIdx}
+                    className="px-3 py-1 rounded-full text-xs font-semibold bg-white/90 dark:bg-white/10 border border-[#D8D8D8] dark:border-white/10 text-[#182747] dark:text-[#D8D8D8] shadow-2xs"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Bottom Slider Pagination Controls */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-[#D8D8D8]/60 dark:border-[#D8D8D8]/20">
+            {/* Slide Index Counter */}
+            <div className="flex items-center gap-2 text-xs font-bold text-[#182747]/70 dark:text-[#D8D8D8]/70">
+              <span>Card</span>
+              <span className="text-sm font-extrabold text-[#182747] dark:text-white">
+                0{currentIndex + 1}
+              </span>
+              <span>of</span>
+              <span className="text-sm font-extrabold text-[#182747] dark:text-white">
+                0{total}
+              </span>
+            </div>
+
+            {/* Pagination Glass Dots */}
+            <div className="flex items-center gap-2">
+              {filteredExperiences.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => goToSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    currentIndex === idx
+                      ? 'w-8 bg-[#182747] dark:bg-[#647E68] shadow-xs'
+                      : 'w-2.5 bg-[#D8D8D8] dark:bg-white/20 hover:bg-[#182747]/40 dark:hover:bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Mobile Prev / Next Buttons */}
+            <div className="flex sm:hidden items-center gap-2">
+              <button
+                onClick={prevSlide}
+                disabled={total <= 1}
+                aria-label="Previous experience"
+                className="px-4 py-2 rounded-full text-xs font-bold bg-white dark:bg-white/10 border border-[#D8D8D8] dark:border-[#D8D8D8]/20 text-[#182747] dark:text-[#D8D8D8] flex items-center gap-1 shadow-xs cursor-pointer"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+                <span>Prev</span>
+              </button>
+              <button
+                onClick={nextSlide}
+                disabled={total <= 1}
+                aria-label="Next experience"
+                className="px-4 py-2 rounded-full text-xs font-bold bg-[#182747] dark:bg-[#647E68] text-white flex items-center gap-1 shadow-xs cursor-pointer"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

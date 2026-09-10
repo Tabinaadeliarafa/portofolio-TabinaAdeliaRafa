@@ -6,39 +6,39 @@ export default function About() {
   return (
     <section id="about" className="py-12 sm:py-20 px-3 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       {/* Editorial Section Wrapper Container */}
-      <div className="bg-white rounded-[36px] sm:rounded-[44px] border border-[#D8D8D8] p-6 sm:p-10 lg:p-14 shadow-[0_8px_30px_rgb(24,39,71,0.04)] relative overflow-hidden">
+      <div className="bg-white/90 dark:bg-[#0f1a30]/80 rounded-[36px] sm:rounded-[44px] border border-[#D8D8D8] dark:border-white/10 p-6 sm:p-10 lg:p-14 shadow-[0_12px_40px_rgb(24,39,71,0.04)] relative overflow-hidden backdrop-blur-xl transition-colors">
         {/* Subtle Ambient Background Gradients */}
-        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#647E68]/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-[#562B08]/8 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#647E68]/10 dark:bg-[#647E68]/15 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-[#562B08]/8 dark:bg-[#562B08]/15 blur-3xl pointer-events-none" />
 
         {/* Section Header Eyebrow */}
         <div className="flex items-center gap-2.5 mb-8 relative z-10">
-          <span className="h-px w-8 bg-[#562B08]" />
-          <span className="text-xs font-bold uppercase tracking-widest text-[#562B08]">
+          <span className="h-px w-8 bg-[#562B08] dark:bg-amber-400" />
+          <span className="text-xs font-bold uppercase tracking-widest text-[#562B08] dark:text-amber-400">
             About Me
           </span>
         </div>
 
         {/* Top Feature Statement Banner */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-10 pb-10 border-b border-[#D8D8D8]/70 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-10 pb-10 border-b border-[#D8D8D8]/70 dark:border-white/10 relative z-10">
           <div className="lg:col-span-7">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#182747] leading-[1.14] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#182747] dark:text-white leading-[1.14] tracking-tight">
               Curious by{' '}
-              <span className="font-serif italic font-normal text-[#647E68]">nature</span>.
+              <span className="font-serif italic font-normal text-[#647E68] dark:text-[#7b9980]">nature</span>.
               <br />
               Technical by{' '}
-              <span className="font-serif italic font-normal text-[#182747]">mindset</span>.
+              <span className="font-serif italic font-normal text-[#182747] dark:text-[#D8D8D8]">mindset</span>.
               <br />
               Creative by{' '}
-              <span className="font-serif italic font-normal text-[#562B08]">heart</span>.
+              <span className="font-serif italic font-normal text-[#562B08] dark:text-amber-300">heart</span>.
             </h2>
           </div>
 
-          <div className="lg:col-span-5 bg-[#F6F6F6] p-6 sm:p-7 rounded-[28px] border border-[#D8D8D8]">
-            <p className="text-xs sm:text-sm text-[#182747]/85 font-normal leading-relaxed mb-4">
+          <div className="lg:col-span-5 bg-[#F6F6F6] dark:bg-white/5 p-6 sm:p-7 rounded-[28px] border border-[#D8D8D8] dark:border-white/10">
+            <p className="text-xs sm:text-sm text-[#182747]/85 dark:text-[#D8D8D8]/90 font-normal leading-relaxed mb-4">
               {PERSONAL_INFO.aboutDescription}
             </p>
-            <div className="flex items-center gap-2 text-xs font-bold text-[#647E68]">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#647E68] dark:text-[#7b9980]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Bridge between technical rigor & empathetic design</span>
             </div>
@@ -53,39 +53,39 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="md:col-span-7 bg-[#F6F6F6] rounded-[32px] p-6 sm:p-8 border border-[#D8D8D8] flex flex-col justify-between hover:border-[#182747]/30 transition-all"
+            className="md:col-span-7 bg-[#F6F6F6] dark:bg-white/5 rounded-[32px] p-6 sm:p-8 border border-[#D8D8D8] dark:border-white/10 flex flex-col justify-between hover:border-[#182747]/30 dark:hover:border-white/30 transition-all"
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-2xl bg-[#182747] text-white flex items-center justify-center shadow-xs">
+                <div className="w-10 h-10 rounded-2xl bg-[#182747] dark:bg-[#647E68] text-white flex items-center justify-center shadow-xs">
                   <GraduationCap className="w-5 h-5" />
                 </div>
-                <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-white text-[#182747] border border-[#D8D8D8]">
+                <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-white dark:bg-white/10 text-[#182747] dark:text-[#D8D8D8] border border-[#D8D8D8] dark:border-white/10">
                   Undergraduate
                 </span>
               </div>
 
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#647E68] mb-1">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#647E68] dark:text-[#7b9980] mb-1">
                 Formal Higher Education
               </p>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-[#182747] tracking-tight mb-1">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-[#182747] dark:text-white tracking-tight mb-1">
                 {PERSONAL_INFO.university}
               </h3>
-              <p className="text-sm sm:text-base font-semibold text-[#562B08] mb-4">
+              <p className="text-sm sm:text-base font-semibold text-[#562B08] dark:text-amber-300 mb-4">
                 {PERSONAL_INFO.degree}
               </p>
 
-              <p className="text-xs sm:text-sm text-[#182747]/75 leading-relaxed mb-6">
+              <p className="text-xs sm:text-sm text-[#182747]/75 dark:text-[#D8D8D8]/80 leading-relaxed mb-6">
                 Active student in the Department of Informatics. Focused on software architecture, relational & multidimensional database engineering, data modeling, algorithm analysis, and interaction design.
               </p>
             </div>
 
-            <div className="pt-4 border-t border-[#D8D8D8]/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <span className="flex items-center gap-1.5 font-semibold text-[#182747]">
-                <Calendar className="w-3.5 h-3.5 text-[#562B08]" />
+            <div className="pt-4 border-t border-[#D8D8D8]/60 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <span className="flex items-center gap-1.5 font-semibold text-[#182747] dark:text-[#D8D8D8]">
+                <Calendar className="w-3.5 h-3.5 text-[#562B08] dark:text-amber-300" />
                 {PERSONAL_INFO.educationPeriod}
               </span>
-              <span className="text-[#647E68] font-bold">Jatinangor, Sumedang</span>
+              <span className="text-[#647E68] dark:text-[#7b9980] font-bold">Jatinangor, Sumedang</span>
             </div>
           </motion.div>
 
@@ -95,7 +95,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="md:col-span-5 bg-gradient-to-br from-[#182747] to-[#0f1a30] text-white rounded-[32px] p-6 sm:p-8 shadow-md flex flex-col justify-between"
+            className="md:col-span-5 bg-gradient-to-br from-[#182747] to-[#0f1a30] text-white rounded-[32px] p-6 sm:p-8 shadow-md border border-white/10 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -123,7 +123,7 @@ export default function About() {
 
             <div className="pt-4 border-t border-white/15 flex items-center justify-between text-xs text-white/70 font-medium">
               <span>Status: Active Undergrad</span>
-              <span className="text-[#647E68] font-bold">In Good Standing</span>
+              <span className="text-[#647E68] dark:text-[#7b9980] font-bold">In Good Standing</span>
             </div>
           </motion.div>
 
@@ -133,22 +133,22 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="md:col-span-4 bg-[#F6F6F6] rounded-[28px] p-6 border border-[#D8D8D8] flex flex-col justify-between hover:border-[#182747]/30 transition-all"
+            className="md:col-span-4 bg-[#F6F6F6] dark:bg-white/5 rounded-[28px] p-6 border border-[#D8D8D8] dark:border-white/10 flex flex-col justify-between hover:border-[#182747]/30 dark:hover:border-white/30 transition-all"
           >
             <div>
-              <div className="w-9 h-9 rounded-xl bg-[#562B08]/15 text-[#562B08] flex items-center justify-center mb-3">
+              <div className="w-9 h-9 rounded-xl bg-[#562B08]/15 dark:bg-amber-400/15 text-[#562B08] dark:text-amber-300 flex items-center justify-center mb-3">
                 <MapPin className="w-4 h-4" />
               </div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#182747]/60">Base Location</p>
-              <h4 className="text-lg font-bold text-[#182747] tracking-tight mt-0.5">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#182747]/60 dark:text-[#D8D8D8]/60">Base Location</p>
+              <h4 className="text-lg font-bold text-[#182747] dark:text-white tracking-tight mt-0.5">
                 {PERSONAL_INFO.location}
               </h4>
-              <p className="text-xs text-[#182747]/70 mt-1">
+              <p className="text-xs text-[#182747]/70 dark:text-[#D8D8D8]/70 mt-1">
                 West Java, Indonesia. Open for hybrid & remote technical roles.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#D8D8D8]/60 text-[11px] text-[#647E68] font-bold">
-              Available for Internships
+            <div className="mt-4 pt-3 border-t border-[#D8D8D8]/60 dark:border-white/10 text-[11px] text-[#647E68] dark:text-[#7b9980] font-bold">
+              Available for Opportunities
             </div>
           </motion.div>
 
@@ -158,34 +158,34 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="md:col-span-8 bg-[#647E68]/10 rounded-[28px] p-6 sm:p-7 border border-[#647E68]/20 flex flex-col justify-between"
+            className="md:col-span-8 bg-[#647E68]/10 dark:bg-[#647E68]/15 rounded-[28px] p-6 sm:p-7 border border-[#647E68]/20 dark:border-[#647E68]/30 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <HeartHandshake className="w-4 h-4 text-[#562B08]" />
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#647E68]">
+                <HeartHandshake className="w-4 h-4 text-[#562B08] dark:text-amber-400" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#647E68] dark:text-[#7b9980]">
                   Professional Work Ethos
                 </h4>
               </div>
-              <p className="text-xs text-[#182747]/80 mb-4 leading-relaxed">
+              <p className="text-xs text-[#182747]/80 dark:text-[#D8D8D8]/80 mb-4 leading-relaxed">
                 Proven competencies applied consistently across academic projects, corporate internships, and student governance:
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] bg-white/70 p-2.5 rounded-xl border border-white/80">
-                  <CheckCircle2 className="w-4 h-4 text-[#647E68] shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] dark:text-[#D8D8D8] bg-white/70 dark:bg-white/5 p-2.5 rounded-xl border border-white/80 dark:border-white/10">
+                  <CheckCircle2 className="w-4 h-4 text-[#647E68] dark:text-[#7b9980] shrink-0" />
                   <span>Independent & Team-Ready Collaboration</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] bg-white/70 p-2.5 rounded-xl border border-white/80">
-                  <CheckCircle2 className="w-4 h-4 text-[#647E68] shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] dark:text-[#D8D8D8] bg-white/70 dark:bg-white/5 p-2.5 rounded-xl border border-white/80 dark:border-white/10">
+                  <CheckCircle2 className="w-4 h-4 text-[#647E68] dark:text-[#7b9980] shrink-0" />
                   <span>Strong Attention to Detail & Rigor</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] bg-white/70 p-2.5 rounded-xl border border-white/80">
-                  <CheckCircle2 className="w-4 h-4 text-[#647E68] shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] dark:text-[#D8D8D8] bg-white/70 dark:bg-white/5 p-2.5 rounded-xl border border-white/80 dark:border-white/10">
+                  <CheckCircle2 className="w-4 h-4 text-[#647E68] dark:text-[#7b9980] shrink-0" />
                   <span>Effective Time & Milestone Management</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] bg-white/70 p-2.5 rounded-xl border border-white/80">
-                  <CheckCircle2 className="w-4 h-4 text-[#647E68] shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#182747] dark:text-[#D8D8D8] bg-white/70 dark:bg-white/5 p-2.5 rounded-xl border border-white/80 dark:border-white/10">
+                  <CheckCircle2 className="w-4 h-4 text-[#647E68] dark:text-[#7b9980] shrink-0" />
                   <span>Clear Technical & Stakeholder Communication</span>
                 </div>
               </div>

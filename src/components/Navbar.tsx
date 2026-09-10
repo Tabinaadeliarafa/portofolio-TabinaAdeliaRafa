@@ -18,31 +18,42 @@ import {
   Moon,
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../context/ThemeContext';
 
 interface NavbarProps {
   onOpenResume: () => void;
 }
 
 export default function Navbar({ onOpenResume }: NavbarProps) {
+  const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === 'dark';
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
 
-      const sections = ['hero', 'about', 'approach', 'experience', 'organization', 'projects', 'skills', 'contact'];
+      const sections = [
+        'hero',
+        'about',
+        'approach',
+        'experience',
+        'organization',
+        'projects',
+        'skills',
+        'contact',
+      ];
+
       const scrollPos = window.scrollY + 220;
 
       for (const section of sections) {
         const el = document.getElementById(section);
+
         if (el) {
           const top = el.offsetTop;
           const height = el.offsetHeight;
+
           if (scrollPos >= top && scrollPos < top + height) {
             setActiveSection(section);
             break;
@@ -52,6 +63,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -67,166 +79,280 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
+
     const element = document.querySelector(href);
+
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // Shared "liquid glass" treatment: translucent, saturated blur, a hairline
-  // border that catches light, and a soft inner highlight like real glass.
-  // Bubbles get slightly denser + a stronger shadow once the page is scrolled.
-  const glassPill = `${
-    scrolled
-      ? 'bg-white/60 dark:bg-navy-dark/60 border-white/70 dark:border-white/10'
-      : 'bg-white/35 dark:bg-navy-dark/35 border-white/50 dark:border-white/10'
-  } backdrop-blur-2xl backdrop-saturate-150 border shadow-[0_8px_32px_rgba(24,39,71,0.10),inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors duration-300`;
-
-  const glassButton = `bg-white/45 dark:bg-white/10 backdrop-blur-2xl backdrop-saturate-150 border border-white/60 dark:border-white/10 shadow-[0_4px_20px_rgba(24,39,71,0.08),inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors duration-300`;
-
-  const ThemeToggleButton = ({
-    className = '',
-    size = 'w-4 h-4',
-  }: {
-    className?: string;
-    size?: string;
-  }) => (
-    <button
-      id="theme-toggle"
-      type="button"
-      onClick={toggleTheme}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      aria-pressed={isDark}
-      className={`relative overflow-hidden rounded-full text-[#182747] dark:text-white hover:border-[#182747]/40 dark:hover:border-white/30 transition-all cursor-pointer ${glassButton} ${className}`}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        {isDark ? (
-          <motion.span
-            key="sun"
-            initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-            transition={{ duration: 0.25 }}
-            className="flex items-center justify-center"
-          >
-            <Sun className={`${size} text-amber-300`} />
-          </motion.span>
-        ) : (
-          <motion.span
-            key="moon"
-            initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
-            transition={{ duration: 0.25 }}
-            className="flex items-center justify-center"
-          >
-            <Moon className={`${size} text-[#562B08]`} />
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </button>
-  );
-
   return (
     <>
-      {/* Desktop Floating Pill Navigation (Liquid Glass Capsule) */}
+      {/* Desktop Floating Glass Bubble Navigation */}
       <header
         id="main-navbar"
-        className="fixed top-3 sm:top-5 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none transition-all duration-300"
+        className={`fixed top-3 sm:top-5 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none transition-all duration-500 ${
+          scrolled ? 'translate-y-0' : ''
+        }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
-          {/* Brand Pill */}
+
+          {/* Brand Glass Bubble */}
           <a
             href="#hero"
             id="brand-logo-link"
-            className={`group flex items-center gap-2.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full hover:border-[#182747]/40 dark:hover:border-white/30 hover:shadow-md ${glassPill}`}
+            className="
+              group relative flex items-center gap-2.5
+              px-3 sm:px-4 py-2 sm:py-2.5
+              rounded-full
+              bg-white/45 dark:bg-[#0f1a30]/45
+              backdrop-blur-2xl backdrop-saturate-150
+              border border-white/70 dark:border-white/15
+              shadow-[0_8px_32px_rgba(24,39,71,0.10)]
+              ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+              overflow-hidden
+              hover:bg-white/60 dark:hover:bg-[#182747]/60
+              hover:border-white/90 dark:hover:border-white/25
+              hover:shadow-[0_12px_40px_rgba(24,39,71,0.16)]
+              transition-all duration-300
+            "
           >
-            <div className="w-8 h-8 rounded-full bg-[#182747] dark:bg-white text-white dark:text-[#0f1a30] flex items-center justify-center font-bold text-xs tracking-wider shadow-xs transition-transform duration-300 group-hover:scale-105">
+            {/* Glass Highlight */}
+            <span className="absolute inset-x-3 top-0 h-px bg-white/80 dark:bg-white/20 pointer-events-none" />
+
+            <div className="relative w-8 h-8 rounded-full bg-[#182747] dark:bg-[#647E68] text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_4px_12px_rgba(24,39,71,0.18)] transition-transform duration-300 group-hover:scale-105">
               TAR
             </div>
-            <div className="flex flex-col text-left">
-              <span className="font-bold text-xs sm:text-sm tracking-tight text-[#182747] dark:text-white group-hover:text-[#562B08] dark:group-hover:text-amber-300 transition-colors leading-tight">
+
+            <div className="relative flex flex-col text-left">
+              <span className="font-bold text-xs sm:text-sm tracking-tight text-[#182747] dark:text-[#D8D8D8] group-hover:text-[#562B08] dark:group-hover:text-white transition-colors leading-tight">
                 {PERSONAL_INFO.name}
               </span>
-              <span className="text-[10px] text-[#647E68] dark:text-[#9db3a2] font-semibold tracking-wide hidden md:inline">
+
+              <span className="text-[10px] text-[#647E68] dark:text-[#7b9980] font-semibold tracking-wide hidden md:inline">
                 Informatics Engineering • Unpad
               </span>
             </div>
           </a>
 
-          {/* Centered Floating Nav Capsule (Desktop) */}
-          <nav className={`hidden lg:flex items-center gap-1 p-1.5 rounded-full ${glassPill}`}>
+          {/* Center Glass Navigation Bubble */}
+          <nav
+            className="
+              hidden lg:flex items-center gap-1
+              bg-white/40 dark:bg-[#0f1a30]/45
+              backdrop-blur-2xl backdrop-saturate-150
+              p-1.5 rounded-full
+              border border-white/70 dark:border-white/15
+              shadow-[0_8px_32px_rgba(24,39,71,0.10)]
+              ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+              relative overflow-hidden
+            "
+          >
+            {/* Glass Highlight */}
+            <span className="absolute inset-x-6 top-0 h-px bg-white/80 dark:bg-white/20 pointer-events-none" />
+
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
+
               return (
                 <button
                   key={link.id}
                   id={`nav-link-${link.id}`}
                   onClick={() => handleNavClick(link.href)}
-                  className={`relative px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer ${
+                  className={`relative px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer ${
                     isActive
                       ? 'text-[#182747] dark:text-white font-bold'
-                      : 'text-[#182747]/70 dark:text-white/60 hover:text-[#182747] dark:hover:text-white hover:bg-black/4 dark:hover:bg-white/10'
+                      : 'text-[#182747]/70 dark:text-[#D8D8D8]/70 hover:text-[#182747] dark:hover:text-white hover:bg-white/40 dark:hover:bg-white/10'
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="activeNavIndicator"
-                      className="absolute inset-0 bg-white/80 dark:bg-white/15 rounded-full border border-white/80 dark:border-white/10 shadow-2xs -z-10"
-                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                      className="
+                        absolute inset-0
+                        bg-white/65 dark:bg-white/15
+                        backdrop-blur-md
+                        rounded-full
+                        border border-white/80 dark:border-white/15
+                        shadow-[inset_0_1px_2px_rgba(255,255,255,0.65),0_3px_10px_rgba(24,39,71,0.06)]
+                        -z-10
+                      "
+                      transition={{
+                        type: 'spring',
+                        stiffness: 420,
+                        damping: 32,
+                      }}
                     />
                   )}
+
                   {link.label}
                 </button>
               );
             })}
           </nav>
 
-          {/* Right Action Capsule */}
+          {/* Right Glass Action Bubbles */}
           <div className="hidden sm:flex items-center gap-2">
-            <ThemeToggleButton className="p-2.5" />
+
+            {/* Theme Toggle */}
+            <button
+              id="navbar-theme-toggle-btn"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+              className="
+                inline-flex items-center gap-1.5
+                px-3 py-2 rounded-full
+                text-xs font-semibold
+                bg-white/45 dark:bg-[#0f1a30]/45
+                backdrop-blur-2xl backdrop-saturate-150
+                border border-white/70 dark:border-white/15
+                text-[#182747] dark:text-[#D8D8D8]
+                hover:bg-white/65 dark:hover:bg-[#182747]/65
+                hover:border-white/90 dark:hover:border-white/25
+                shadow-[0_8px_28px_rgba(24,39,71,0.10)]
+                ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+                transition-all duration-300
+                cursor-pointer
+              "
+            >
+              {theme === 'light' ? (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-[#182747]" />
+                  <span className="hidden md:inline">Dark</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-300" />
+                  <span className="hidden md:inline">Light</span>
+                </>
+              )}
+            </button>
+
+            {/* Resume */}
             <button
               id="navbar-resume-btn"
               onClick={onOpenResume}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-[#182747] dark:text-white hover:border-[#182747] dark:hover:border-white/40 hover:bg-white/60 dark:hover:bg-white/15 transition-all cursor-pointer ${glassButton}`}
+              className="
+                inline-flex items-center gap-1.5
+                px-3.5 py-2 rounded-full
+                text-xs font-semibold
+                bg-white/45 dark:bg-[#0f1a30]/45
+                backdrop-blur-2xl backdrop-saturate-150
+                border border-white/70 dark:border-white/15
+                text-[#182747] dark:text-[#D8D8D8]
+                hover:bg-white/65 dark:hover:bg-[#182747]/65
+                hover:border-white/90 dark:hover:border-white/25
+                shadow-[0_8px_28px_rgba(24,39,71,0.10)]
+                ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+                transition-all duration-300
+                cursor-pointer
+              "
             >
-              <FileText className="w-3.5 h-3.5 text-[#562B08] dark:text-amber-300" />
+              <FileText className="w-3.5 h-3.5 text-[#562B08] dark:text-amber-400" />
               <span>Resume</span>
             </button>
+
+            {/* Connect */}
             <a
               id="navbar-contact-cta"
               href="#contact"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-[#182747] dark:bg-white text-white dark:text-[#0f1a30] hover:bg-[#562B08] dark:hover:bg-amber-300 transition-all cursor-pointer shadow-[0_4px_16px_rgb(24,39,71,0.18)]"
+              className="
+                inline-flex items-center gap-1.5
+                px-4 py-2 rounded-full
+                text-xs font-semibold
+                bg-[#182747]/90 dark:bg-[#647E68]/90
+                backdrop-blur-xl
+                border border-white/20
+                text-white
+                hover:bg-[#562B08]/95
+                shadow-[0_8px_24px_rgba(24,39,71,0.20)]
+                transition-all duration-300
+                cursor-pointer
+              "
             >
               <span>Connect</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
 
-          {/* Mobile Right Controls */}
+          {/* Mobile Glass Controls */}
           <div className="flex sm:hidden items-center gap-2">
-            <ThemeToggleButton className="p-2.5" />
+
+            {/* Mobile Theme */}
+            <button
+              id="mobile-theme-toggle"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              className="
+                relative p-2.5 rounded-full
+                bg-white/50 dark:bg-[#0f1a30]/50
+                backdrop-blur-2xl backdrop-saturate-150
+                border border-white/70 dark:border-white/15
+                text-[#182747] dark:text-[#D8D8D8]
+                shadow-[0_8px_28px_rgba(24,39,71,0.12)]
+                ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+                cursor-pointer
+                transition-all duration-300
+              "
+            >
+              {theme === 'light' ? (
+                <Moon className="w-4 h-4 text-[#182747]" />
+              ) : (
+                <Sun className="w-4 h-4 text-amber-300" />
+              )}
+            </button>
+
+            {/* Mobile Resume */}
             <button
               id="mobile-resume-trigger"
               onClick={onOpenResume}
-              className={`p-2.5 rounded-full text-[#182747] dark:text-white ${glassButton}`}
+              className="
+                relative p-2.5 rounded-full
+                bg-white/50 dark:bg-[#0f1a30]/50
+                backdrop-blur-2xl backdrop-saturate-150
+                border border-white/70 dark:border-white/15
+                text-[#182747] dark:text-[#D8D8D8]
+                shadow-[0_8px_28px_rgba(24,39,71,0.12)]
+                ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+                cursor-pointer
+                transition-all duration-300
+              "
               aria-label="View Resume"
             >
-              <FileText className="w-4 h-4 text-[#562B08] dark:text-amber-300" />
+              <FileText className="w-4 h-4 text-[#562B08] dark:text-amber-400" />
             </button>
+
+            {/* Mobile Menu */}
             <button
               id="mobile-menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2.5 rounded-full text-[#182747] dark:text-white focus:outline-hidden ${glassButton}`}
+              className="
+                relative p-2.5 rounded-full
+                bg-white/50 dark:bg-[#0f1a30]/50
+                backdrop-blur-2xl backdrop-saturate-150
+                border border-white/70 dark:border-white/15
+                text-[#182747] dark:text-[#D8D8D8]
+                shadow-[0_8px_28px_rgba(24,39,71,0.12)]
+                ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+                focus:outline-hidden
+                cursor-pointer
+                transition-all duration-300
+              "
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              {mobileMenuOpen ? (
+                <X className="w-4 h-4" />
+              ) : (
+                <Menu className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Top Dropdown Drawer (Liquid Glass Card) */}
+      {/* Mobile Glass Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -234,36 +360,61 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.98 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed inset-x-4 top-18 z-50 bg-white/70 dark:bg-navy-dark/70 backdrop-blur-2xl backdrop-saturate-150 border border-white/60 dark:border-white/10 rounded-[32px] p-5 shadow-[0_16px_48px_rgba(24,39,71,0.16),inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)] sm:hidden text-left"
+            className="
+              fixed inset-x-4 top-18 z-50
+              bg-white/55 dark:bg-[#0f1a30]/60
+              backdrop-blur-3xl backdrop-saturate-150
+              border border-white/70 dark:border-white/15
+              rounded-[32px]
+              p-5
+              shadow-[0_20px_60px_rgba(24,39,71,0.18)]
+              ring-1 ring-black/[0.03] dark:ring-white/[0.04]
+              sm:hidden
+              text-left
+              overflow-hidden
+            "
             id="mobile-nav-drawer"
           >
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#D8D8D8]/70 dark:border-white/10">
+            {/* Glass highlight */}
+            <span className="absolute inset-x-8 top-0 h-px bg-white/90 dark:bg-white/20 pointer-events-none" />
+
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/60 dark:border-white/10">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#647E68] dark:bg-[#9db3a2]" />
-                <span className="text-xs font-bold uppercase tracking-wider text-[#182747] dark:text-white">
+                <span className="w-2 h-2 rounded-full bg-[#647E68] shadow-[0_0_10px_rgba(100,126,104,0.45)]" />
+
+                <span className="text-xs font-bold uppercase tracking-wider text-[#182747] dark:text-[#D8D8D8]">
                   Navigation Menu
                 </span>
               </div>
-              <span className="text-[11px] text-[#647E68] dark:text-[#9db3a2] font-bold">
+
+              <span className="text-[11px] text-[#647E68] dark:text-[#7b9980] font-bold">
                 {activeSection.toUpperCase()}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-1.5 pb-4 mb-4 border-b border-[#D8D8D8]/70 dark:border-white/10">
+            <div className="grid grid-cols-2 gap-1.5 pb-4 mb-4 border-b border-white/60 dark:border-white/10">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = activeSection === link.id;
+
                 return (
                   <button
                     key={link.id}
                     onClick={() => handleNavClick(link.href)}
-                    className={`flex items-center gap-2 px-3 py-2.5 rounded-2xl text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-2xl text-xs font-semibold transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-[#182747] dark:bg-white/15 text-white dark:text-white font-bold border border-transparent dark:border-white/20'
-                        : 'text-[#182747] dark:text-white/80 hover:bg-[#F6F6F6] dark:hover:bg-white/10'
+                        ? 'bg-[#182747]/90 dark:bg-[#647E68]/90 text-white font-bold shadow-[0_5px_16px_rgba(24,39,71,0.15)]'
+                        : 'text-[#182747] dark:text-[#D8D8D8] hover:bg-white/50 dark:hover:bg-white/10'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#562B08] dark:text-amber-300'}`} />
+                    <Icon
+                      className={`w-3.5 h-3.5 ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-[#562B08] dark:text-amber-400'
+                      }`}
+                    />
+
                     <span>{link.label}</span>
                   </button>
                 );
@@ -272,30 +423,41 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
 
             <div className="flex flex-col gap-2">
               <button
-                onClick={toggleTheme}
-                className="w-full py-2.5 px-4 rounded-2xl text-xs font-bold border border-[#D8D8D8]/70 dark:border-white/10 bg-[#F6F6F6]/80 dark:bg-white/10 text-[#182747] dark:text-white flex items-center justify-center gap-2"
-              >
-                {isDark ? (
-                  <Sun className="w-4 h-4 text-amber-300" />
-                ) : (
-                  <Moon className="w-4 h-4 text-[#562B08]" />
-                )}
-                <span>{isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</span>
-              </button>
-              <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenResume();
                 }}
-                className="w-full py-2.5 px-4 rounded-2xl text-xs font-bold border border-[#D8D8D8]/70 dark:border-white/10 bg-[#F6F6F6]/80 dark:bg-white/10 text-[#182747] dark:text-white flex items-center justify-center gap-2"
+                className="
+                  w-full py-2.5 px-4
+                  rounded-2xl
+                  text-xs font-bold
+                  border border-white/70 dark:border-white/15
+                  bg-white/40 dark:bg-white/10
+                  backdrop-blur-xl
+                  text-[#182747] dark:text-[#D8D8D8]
+                  flex items-center justify-center gap-2
+                  cursor-pointer
+                  transition-all duration-300
+                  hover:bg-white/60 dark:hover:bg-white/15
+                "
               >
-                <FileText className="w-4 h-4 text-[#562B08] dark:text-amber-300" />
+                <FileText className="w-4 h-4 text-[#562B08] dark:text-amber-400" />
                 <span>View Full Resume & Credentials</span>
               </button>
+
               <a
                 href="#contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-2.5 px-4 rounded-2xl text-xs font-bold bg-[#182747] dark:bg-white text-white dark:text-[#0f1a30] flex items-center justify-center gap-2 shadow-xs"
+                className="
+                  w-full py-2.5 px-4
+                  rounded-2xl
+                  text-xs font-bold
+                  bg-[#182747]/90 dark:bg-[#647E68]/90
+                  backdrop-blur-xl
+                  text-white
+                  flex items-center justify-center gap-2
+                  shadow-[0_8px_20px_rgba(24,39,71,0.18)]
+                "
               >
                 <Send className="w-4 h-4" />
                 <span>Get In Touch</span>
@@ -305,51 +467,76 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
         )}
       </AnimatePresence>
 
-      {/* Floating Bottom App Dock for Mobile (thumb-accessible glass capsule) */}
+      {/* Floating Bottom Glass Dock for Mobile */}
       <div className="fixed bottom-4 inset-x-0 z-30 flex justify-center pointer-events-none sm:hidden px-4">
-        <div className="pointer-events-auto bg-[#182747]/70 dark:bg-navy-dark/70 backdrop-blur-2xl backdrop-saturate-150 text-white px-3 py-1.5 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20 dark:border-white/10 flex items-center gap-1.5">
+        <div
+          className="
+            pointer-events-auto
+            bg-[#182747]/75 dark:bg-[#0f1a30]/75
+            backdrop-blur-2xl backdrop-saturate-150
+            text-white
+            px-3 py-1.5
+            rounded-full
+            shadow-[0_10px_35px_rgba(24,39,71,0.28)]
+            border border-white/20 dark:border-white/10
+            flex items-center gap-1.5
+          "
+        >
           <a
             href="#hero"
             className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-colors ${
-              activeSection === 'hero' ? 'bg-white/20 text-white font-bold' : 'text-white/70 hover:text-white'
+              activeSection === 'hero'
+                ? 'bg-white/20 text-white font-bold'
+                : 'text-white/70 hover:text-white'
             }`}
           >
             Home
           </a>
+
           <a
             href="#about"
             className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-colors ${
-              activeSection === 'about' ? 'bg-white/20 text-white font-bold' : 'text-white/70 hover:text-white'
+              activeSection === 'about'
+                ? 'bg-white/20 text-white font-bold'
+                : 'text-white/70 hover:text-white'
             }`}
           >
             About
           </a>
+
           <a
             href="#experience"
             className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-colors ${
-              activeSection === 'experience' ? 'bg-white/20 text-white font-bold' : 'text-white/70 hover:text-white'
+              activeSection === 'experience'
+                ? 'bg-white/20 text-white font-bold'
+                : 'text-white/70 hover:text-white'
             }`}
           >
             Career
           </a>
+
           <a
             href="#projects"
             className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-colors ${
-              activeSection === 'projects' ? 'bg-white/20 text-white font-bold' : 'text-white/70 hover:text-white'
+              activeSection === 'projects'
+                ? 'bg-white/20 text-white font-bold'
+                : 'text-white/70 hover:text-white'
             }`}
           >
             Projects
           </a>
-          <button
-            onClick={toggleTheme}
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="p-1.5 rounded-full bg-white/15 text-white flex items-center justify-center"
-          >
-            {isDark ? <Sun className="w-3 h-3 text-amber-300" /> : <Moon className="w-3 h-3" />}
-          </button>
+
           <a
             href="#contact"
-            className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#647E68] text-white flex items-center gap-1 shadow-xs"
+            className="
+              text-[11px] font-bold
+              px-3 py-1
+              rounded-full
+              bg-[#647E68]
+              text-white
+              flex items-center gap-1
+              shadow-[0_4px_14px_rgba(100,126,104,0.35)]
+            "
           >
             <Sparkles className="w-3 h-3" />
             <span>Connect</span>
